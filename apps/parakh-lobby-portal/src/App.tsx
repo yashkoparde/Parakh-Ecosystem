@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { ArrowRight, User, ShieldCheck, Landmark, Settings, CheckCircle } from "lucide-react";
+import { GraduationCap, ShieldAlert, Monitor, Search, Key } from "lucide-react";
 
-// Deployed portal endpoints
-const PORTALS = [
+// Deployed portal targets mapped to Netflix-style profiles
+const PROFILES = [
   {
-    name: "Student Portal",
-    icon: User,
+    name: "Student",
+    icon: GraduationCap,
     url: "https://parakh-student.vercel.app/",
-    description: "Enables candidates to review published scores, check examination schedules, and export certified academic marksheets & migration records.",
-    accessRoles: ["Student Candidate"]
+    bgClass: "bg-sky-600 hover:bg-sky-500",
+    color: "text-sky-400"
   },
   {
-    name: "Admin & Central Command",
-    icon: Settings,
+    name: "Board Command",
+    icon: ShieldAlert,
     url: "https://parakh-admin.vercel.app/",
-    description: "Central administrative dashboard for creating syllabus blueprints, reviewing question catalogs, sealing papers, and auditing grading queues.",
-    accessRoles: ["Board Controller", "Academic Auditor", "Evaluations Registrar"]
+    bgClass: "bg-indigo-600 hover:bg-indigo-500",
+    color: "text-indigo-400"
   },
   {
-    name: "Physical Exam Center",
-    icon: Landmark,
+    name: "Exam Center",
+    icon: Monitor,
     url: "https://parakh-exam-center.vercel.app/",
-    description: "On-site command panel for biometric gate check-in registration, jammer event detection, and dual-key secure exam paper printing.",
-    accessRoles: ["Center Supervisor", "NTA Board Observer"]
+    bgClass: "bg-teal-600 hover:bg-teal-500",
+    color: "text-teal-400"
   },
   {
-    name: "Public Verification Portal",
-    icon: ShieldCheck,
+    name: "Public Verifier",
+    icon: Search,
     url: "https://parakh-verifier.vercel.app/",
-    description: "Open-access registry verification service. Calculates document SHA-256 hashes locally to validate authenticity against blockchain records.",
-    accessRoles: ["Universities", "Employers", "Public Evaluators"]
+    bgClass: "bg-neutral-700 hover:bg-neutral-600",
+    color: "text-neutral-300"
   }
 ];
 
@@ -42,23 +42,24 @@ const DEMO_CREDENTIALS = [
   { role: "Center Supervisor", portal: "Exam Center Portal", email: "supervisor@parakh.gov.in", pass: "SupervisorPass123" }
 ];
 
-type IntroStep = "hbo-loading" | "student-run" | "parakh-intro" | "gateways";
+type IntroStep = "hbo-loading" | "student-run" | "gateways";
 
 export default function App() {
   const [currentStep, setCurrentStep] = useState<IntroStep>("hbo-loading");
   const [runningProgress, setRunningProgress] = useState(0);
+  const [showCredentials, setShowCredentials] = useState(false);
 
-  // 1. HBO Loading Sequence duration matching HBOLoader.tsx
+  // 1. HBO Loader Duration matching HBOLoader.tsx
   useEffect(() => {
     if (currentStep === "hbo-loading") {
       const timer = setTimeout(() => {
         setCurrentStep("student-run");
-      }, 4600); // 4.6 seconds standard
+      }, 4600);
       return () => clearTimeout(timer);
     }
   }, [currentStep]);
 
-  // 2. Student Platform Running sequence
+  // 2. Student Platform Running animation
   useEffect(() => {
     if (currentStep === "student-run") {
       const interval = setInterval(() => {
@@ -66,29 +67,19 @@ export default function App() {
           if (prev >= 100) {
             clearInterval(interval);
             setTimeout(() => {
-              setCurrentStep("parakh-intro");
-            }, 1000); // Wait on success
+              setCurrentStep("gateways");
+            }, 1000); // Transition to role selector after success settles
             return 100;
           }
           return prev + 2;
         });
-      }, 45); // Takes ~2.2 seconds
+      }, 45); // Runs for ~2.2 seconds
       return () => clearInterval(interval);
     }
   }, [currentStep]);
 
-  // 3. PARAKH Intro title screen duration
-  useEffect(() => {
-    if (currentStep === "parakh-intro") {
-      const timer = setTimeout(() => {
-        setCurrentStep("gateways");
-      }, 2500);
-      return () => clearTimeout(timer);
-    }
-  }, [currentStep]);
-
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative font-sans select-none">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative font-sans select-none overflow-hidden">
       
       {/* ----------------- STEP 1: HBO CINEMATIC INTRO ----------------- */}
       {currentStep === "hbo-loading" && (
@@ -104,10 +95,10 @@ export default function App() {
               </h1>
             </div>
 
-            {/* Secondary subtitle "LOBBY GATEWAY" */}
+            {/* Secondary subtitle "ECOSYSTEM HUB" */}
             <div className="mt-5 flex items-center gap-4 animate-hbo-subtitle">
               <div className="h-[1px] w-5 bg-slate-800" />
-              <span className="text-xs font-mono font-medium text-slate-400">
+              <span className="text-xs font-mono font-medium text-slate-450 text-slate-400">
                 ECOSYSTEM HUB
               </span>
               <div className="h-[1px] w-5 bg-slate-800" />
@@ -124,19 +115,19 @@ export default function App() {
         </div>
       )}
 
-      {/* ----------------- STEP 2: MINIMAL PLATFORM RUNNER ----------------- */}
+      {/* ----------------- STEP 2: MINIMAL RUNNER PLATFORM ----------------- */}
       {currentStep === "student-run" && (
         <div className="flex flex-col items-center justify-center fade-in">
           {/* Horizontal platform line */}
-          <div className="w-[280px] sm:w-[360px] h-1.5 bg-neutral-900 border border-neutral-800 rounded-full relative overflow-visible">
+          <div className="w-[280px] sm:w-[360px] h-1 bg-neutral-900 border border-neutral-800/80 rounded-full relative overflow-visible">
             
-            {/* Travel indicator */}
+            {/* Travel progress fill */}
             <div 
               className="absolute left-0 top-0 h-full bg-slate-400 rounded-full" 
               style={{ width: `${runningProgress}%` }}
             />
             
-            {/* Student avatar (emoji runner) */}
+            {/* Minimalist student runner emoji */}
             <div 
               className="absolute top-[-26px] -translate-x-1/2 text-lg" 
               style={{ left: `${runningProgress}%` }}
@@ -144,14 +135,14 @@ export default function App() {
               🏃
             </div>
 
-            {/* Milestones */}
+            {/* Right milestone flag */}
             <div className="absolute right-[-45px] top-1/2 -translate-y-1/2">
               {runningProgress >= 100 ? (
                 <span className="text-[9px] font-mono font-bold text-emerald-400 tracking-wider">
                   🎓 SUCCESS
                 </span>
               ) : (
-                <span className="text-[9px] font-mono text-neutral-650 text-neutral-500 tracking-wider">
+                <span className="text-[9px] font-mono text-neutral-500 tracking-wider">
                   EXAM
                 </span>
               )}
@@ -164,129 +155,78 @@ export default function App() {
         </div>
       )}
 
-      {/* ----------------- STEP 3: BRAND TITLE FADE-IN ----------------- */}
-      {currentStep === "parakh-intro" && (
-        <div className="text-center space-y-4 fade-in px-6">
-          <h2 className="text-xl sm:text-2xl font-light tracking-[0.3em] font-sans text-white uppercase">
-            PARAKH
-          </h2>
-          <div className="h-[1px] bg-neutral-900 w-16 mx-auto" />
-          <p className="text-[10px] sm:text-xs text-neutral-400 uppercase tracking-widest font-mono">
-            Performance Assessment, Review, and Analysis of Knowledge for Holistic Development
-          </p>
-          <p className="text-[9px] text-neutral-500 font-mono tracking-widest uppercase mt-2">
-            National Examination Governance Ecosystem
-          </p>
-        </div>
-      )}
-
-      {/* ----------------- STEP 4: GOVERNMENT-GRADE REDIRECTION HUB ----------------- */}
+      {/* ----------------- STEP 3: NETFLIX-STYLE ROLE SELECTOR ----------------- */}
       {currentStep === "gateways" && (
-        <div className="w-full max-w-5xl px-6 py-8 flex flex-col justify-between min-h-screen fade-in">
+        <div className="w-full max-w-4xl px-6 py-10 flex flex-col justify-between items-center min-h-[90vh] fade-in">
           
-          {/* Official Header Band */}
-          <header className="border-b border-neutral-900 pb-5 mb-8 flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
-            <div className="space-y-1 text-center sm:text-left">
-              <span className="text-[9px] font-mono text-neutral-500 tracking-widest uppercase block">
-                MINISTRY OF EDUCATION • GOVERNMENT OF INDIA
-              </span>
-              <h2 className="text-lg font-bold tracking-widest font-mono text-white uppercase">
-                PARAKH DIGITAL TRUST NETWORK
-              </h2>
-              <span className="text-[9px] font-mono text-neutral-400 block uppercase">
-                Central Examination Lifecycle Management Portals
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-neutral-950 border border-neutral-900 px-3 py-1 rounded">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[8px] font-mono text-neutral-400 uppercase tracking-wider">
-                System Status: OPERATIONAL
-              </span>
-            </div>
-          </header>
+          <div className="flex-1 flex flex-col items-center justify-center">
+            {/* Netflix-style Header Title */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-neutral-100 tracking-wide mb-10 text-center">
+              Who is accessing PARAKH?
+            </h2>
 
-          {/* Central Portal Gateways Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
-            {PORTALS.map((portal) => {
-              const Icon = portal.icon;
-              return (
-                <div
-                  key={portal.name}
-                  className="bg-neutral-950/60 border border-neutral-900 p-6 rounded flex flex-col justify-between transition-colors duration-200 hover:border-neutral-800"
-                >
-                  <div>
-                    <div className="flex justify-between items-center">
-                      <div className="text-neutral-400 p-1.5 border border-neutral-900 rounded bg-neutral-950">
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="flex gap-1.5">
-                        {portal.accessRoles.map(role => (
-                          <span key={role} className="text-[7.5px] font-mono tracking-wider bg-neutral-900 text-neutral-400 border border-neutral-800 px-1.5 py-0.5 rounded">
-                            {role}
-                          </span>
-                        ))}
-                      </div>
+            {/* Profile Avatars Grid */}
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 max-w-2xl">
+              {PROFILES.map((profile) => {
+                const IconComponent = profile.icon;
+                return (
+                  <a
+                    key={profile.name}
+                    href={profile.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex flex-col items-center text-center focus:outline-none"
+                  >
+                    {/* Square Avatar Block */}
+                    <div className={`w-24 h-24 sm:w-28 sm:h-28 rounded-md flex items-center justify-center transition-all duration-200 border-2 border-transparent group-hover:border-white shadow-lg overflow-hidden ${profile.bgClass}`}>
+                      <IconComponent className="h-10 w-10 text-white opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-200" />
                     </div>
-                    <h3 className="text-sm font-bold text-white font-mono mt-4 tracking-wide uppercase">
-                      {portal.name}
-                    </h3>
-                    <p className="text-[11px] text-neutral-400 mt-2 leading-relaxed">
-                      {portal.description}
-                    </p>
-                  </div>
+                    {/* Role Label */}
+                    <span className="text-xs sm:text-sm text-neutral-400 group-hover:text-neutral-100 mt-4 transition-colors font-sans tracking-wide">
+                      {profile.name}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
 
-                  <div className="mt-6 pt-4 border-t border-neutral-950">
-                    <a
-                      href={portal.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center gap-1.5 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 hover:border-neutral-700 py-2 rounded text-xs font-medium text-neutral-300 hover:text-white transition-colors"
-                    >
-                      Access Portal <ArrowRight className="h-3.5 w-3.5" />
-                    </a>
-                  </div>
+          {/* Minimalist Demo Accounts Drawer at the Bottom */}
+          <div className="w-full flex flex-col items-center mt-12">
+            <button
+              onClick={() => setShowCredentials(!showCredentials)}
+              className="px-6 py-2 border border-neutral-800 hover:border-neutral-500 bg-black hover:bg-neutral-900 text-neutral-500 hover:text-neutral-300 text-[9px] font-mono tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer"
+            >
+              {showCredentials ? "Hide Credentials" : "View Demo Credentials"}
+            </button>
+
+            {showCredentials && (
+              <div className="mt-6 w-full max-w-3xl bg-neutral-950 border border-neutral-900/60 rounded-sm p-4 fade-in">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[9px] border-collapse font-mono text-neutral-400">
+                    <thead>
+                      <tr className="text-neutral-600 border-b border-neutral-900 uppercase">
+                        <th className="pb-2 font-semibold">User Role</th>
+                        <th className="pb-2 font-semibold">Portal Destination</th>
+                        <th className="pb-2 font-semibold">Demo Email</th>
+                        <th className="pb-2 font-semibold">Password</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-900/80">
+                      {DEMO_CREDENTIALS.map((c, i) => (
+                        <tr key={i} className="hover:bg-neutral-900/20">
+                          <td className="py-2.5 font-bold text-neutral-300">{c.role}</td>
+                          <td className="py-2.5 text-neutral-500">{c.portal}</td>
+                          <td className="py-2.5 text-sky-500/80 select-all">{c.email}</td>
+                          <td className="py-2.5 text-indigo-400/80 select-all">{c.pass}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              );
-            })}
+              </div>
+            )}
           </div>
-
-          {/* Secure Audit Credentials Panel */}
-          <div className="mt-8 bg-neutral-950 border border-neutral-900 rounded p-5">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-900">
-              <CheckCircle className="h-4 w-4 text-slate-400" />
-              <span className="text-[9px] font-mono font-bold tracking-widest text-slate-300 uppercase">
-                Official Seed Verification Accounts (Evaluator Testing Keys)
-              </span>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[9px] border-collapse font-mono text-neutral-400">
-                <thead>
-                  <tr className="text-neutral-600 border-b border-neutral-900 uppercase">
-                    <th className="pb-2 font-semibold">Verification Role</th>
-                    <th className="pb-2 font-semibold">Portal Destination</th>
-                    <th className="pb-2 font-semibold">Email Identifier</th>
-                    <th className="pb-2 font-semibold">Access Key</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-900">
-                  {DEMO_CREDENTIALS.map((c, i) => (
-                    <tr key={i} className="hover:bg-neutral-900/40">
-                      <td className="py-2.5 font-bold text-neutral-300">{c.role}</td>
-                      <td className="py-2.5 text-neutral-500">{c.portal}</td>
-                      <td className="py-2.5 text-sky-500 select-all">{c.email}</td>
-                      <td className="py-2.5 text-indigo-400 select-all">{c.pass}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Official Footer */}
-          <footer className="mt-10 border-t border-neutral-950 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[8.5px] text-neutral-500 font-mono tracking-widest uppercase">
-            <span>© 2026 MINISTRY OF EDUCATION, GOVERNMENT OF INDIA. ALL RIGHTS RESERVED.</span>
-            <span>Cryptographic Integrity Assured</span>
-          </footer>
 
         </div>
       )}
