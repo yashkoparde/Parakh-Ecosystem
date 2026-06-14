@@ -132,9 +132,9 @@ flowchart TB
         C2[Blockchain Anchor Records]
     end
 
-    Client Apps -->|queries| B1
-    Client Apps -->|uploads| B2
-    Client Apps -->|calls| B3
+    A1 & A2 & A3 & A4 -->|queries| B1
+    A1 & A2 & A3 & A4 -->|uploads| B2
+    A1 & A2 & A3 & A4 -->|calls| B3
 
     B1 -->|triggers| C1
     B1 -->|automatic hashes| C2
