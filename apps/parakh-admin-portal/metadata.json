@@ -1,0 +1,6 @@
+{
+  "name": "PARAKH Admin Portal",
+  "description": "National-scale examination administration platform for regulators, examination authorities, and national assessment bodies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

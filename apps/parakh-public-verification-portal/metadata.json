@@ -1,0 +1,6 @@
+{
+  "name": "PARAKH Public Verification Portal",
+  "description": "Official public verification portal for examination records, academic certificates, marksheets, and cryptographic audit proofs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

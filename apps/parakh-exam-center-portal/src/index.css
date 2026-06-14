@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Operational Console Utility Resets */
+body {
+  font-family: var(--font-sans);
+  background-color: #F8FAFC;
+  color: #0F172A;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Scrollbar styling for high-density administrative views */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* HBO Grade Cinematic Animation Styles */
+@keyframes hbo-glowing {
+  0% { transform: scale(0.99); opacity: 0.95; }
+  100% { transform: scale(1.01); opacity: 1; }
+}
+
+@keyframes hbo-text {
+  0% {
+    opacity: 0;
+    letter-spacing: -0.05em;
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 0.8;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: 0.25em;
+  }
+}
+
+@keyframes hbo-line {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 80%;
+  }
+}
+
+@keyframes hbo-subtitle {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+    letter-spacing: 0.1em;
+  }
+  40% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.4em;
+  }
+}
+
+@keyframes hbo-progress {
+  0% {
+    left: -40%;
+    width: 30%;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    left: 110%;
+    width: 30%;
+  }
+}
+
+.animate-hbo-glow {
+  animation: hbo-glowing 4s infinite alternate;
+}
+
+.animate-hbo-text {
+  animation: hbo-text 3s ease-out forwards;
+}
+
+.animate-hbo-line {
+  animation: hbo-line 2.2s ease-in-out 0.6s forwards;
+}
+
+.animate-hbo-subtitle {
+  animation: hbo-subtitle 2.8s ease-out 0.3s forwards;
+}
+
+.animate-hbo-progress {
+  animation: hbo-progress 2s infinite ease-in-out;
+}
+

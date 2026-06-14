@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {},
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.1"
+  },
   "devDependencies": {
     "@nx/js": "22.7.5",
     "@swc-node/register": "1.11.1",
@@ -16,6 +18,6 @@
     "typescript": "~5.9.2"
   },
   "workspaces": [
-    "packages/*"
+    "apps/*"
   ]
 }

@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'IBM Plex Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  
+  --color-gov-slate-900: #0F172A;
+  --color-gov-slate-800: #1E293B;
+  --color-gov-slate-700: #334155;
+  --color-gov-green: #166534;
+  --color-gov-amber: #B45309;
+  --color-gov-red: #991B1B;
+  --color-gov-bg: #F8FAFC;
+  --color-gov-border: #CBD5E1;
+  --color-gov-text: #0F172A;
+  --color-gov-muted: #64748B;
+}
+
+@layer base {
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    font-family: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom prints or formal layouts */
+.admin-card {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+.admin-input {
+  border: 1px solid #CBD5E1;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.admin-input:focus {
+  border-color: #334155;
+  box-shadow: 0 0 0 1px #334155;
+}
+
+.badge-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.125rem;
+  border-width: 1px;
+}
+
+/* Print simulation styling for examiner generated paper sheets */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    padding: 2rem !important;
+    color: #000000 !important;
+  }
+}
+
+/* --- HBO Grade Cinematic Animation Keyframes & Utility Classes --- */
+@keyframes hbo-glowing {
+  0% { transform: scale(0.99); opacity: 0.95; }
+  100% { transform: scale(1.01); opacity: 1; }
+}
+
+@keyframes hbo-text {
+  0% {
+    opacity: 0;
+    letter-spacing: -0.05em;
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 0.8;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: 0.25em;
+  }
+}
+
+@keyframes hbo-line {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 80%;
+  }
+}
+
+@keyframes hbo-subtitle {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+    letter-spacing: 0.1em;
+  }
+  45% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.4em;
+  }
+}
+
+/* Helper Utilities */
+.animate-hbo-glow {
+  animation: hbo-glowing 4s infinite alternate;
+}
+
+.animate-hbo-text {
+  animation: hbo-text 3.2s ease-out forwards;
+}
+
+.animate-hbo-line {
+  animation: hbo-line 2.2s ease-in-out 0.6s forwards;
+}
+
+.animate-hbo-subtitle {
+  animation: hbo-subtitle 2.8s ease-out 0.3s forwards;
+}
+

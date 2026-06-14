@@ -1,0 +1,6 @@
+{
+  "name": "PARAKH Exam Center Portal",
+  "description": "Secure, high-integrity examination center operations console for authorized personnel to monitor and manage paper releases, candidate verification, printing control, and incident reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

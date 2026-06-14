@@ -1,0 +1,6 @@
+{
+  "name": "PARAKH Student Portal",
+  "description": "National student examination portal for accessing official academic grades, certificates, and verification records securely.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

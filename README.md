@@ -1,107 +1,117 @@
-# New Nx Repository
+# 🎓 PARAKH Ecosystem
+### Secure, Transparent & Blockchain-Anchored Board Examination Management System
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+PARAKH is a comprehensive, next-generation digital trust network for national-level education boards. It manages the entire lifecycle of examination administration—from blueprint design and secure exam paper printing to candidate biometric check-in, double-blind grading, blockchain results anchoring, and public certificate verification.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+This repository is built as a unified **Nx Monorepo** managing 4 separate React applications, sharing a unified PostgreSQL schema, Row-Level Security (RLS) policies, and Supabase Deno Edge Functions.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Try the full Nx platform
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/setup/connect-workspace/guide). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
+## 🚀 Deployed Portals (Quick Links)
 
-## Generate a library
+Below are the live portals deployed for the judges' evaluation:
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+| Portal | Role | Live URL |
+| :--- | :--- | :--- |
+| **🎓 Student Portal** | Result check, certified credentials download, exam scheduling. | `https://parakh-student.vercel.app` *(Replace with your Vercel URL)* |
+| **🏢 Admin Portal** | Blueprints, secure paper sealing, auditor reviews, verifier locks. | `https://parakh-admin.vercel.app` *(Replace with your Vercel URL)* |
+| **🏫 Exam Center Portal** | CCTV feed status, biometric candidate check-in, secure paper print counts. | `https://parakh-center.vercel.app` *(Replace with your Vercel URL)* |
+| **🔍 Public Verification** | Cryptographic lookup and SHA-256 PDF mismatch checks. | `https://parakh-verifier.vercel.app` *(Replace with your Vercel URL)* |
+
+---
+
+## 🔑 Demo Credentials (For Evaluation)
+
+Please use these pre-seeded roles to log in and test different system flows:
+
+### 1. Student Portal (`Student`)
+* **Email**: `student@parakh.gov.in`
+* **Password**: `StudentPass123`
+* **Role**: Candidate check-in card, marksheets, certificates download.
+
+### 2. Admin Portal (`Controller` / `Auditor` / `Verifier`)
+* **Controller (Level 3 Clearance)**:
+  * **Email**: `controller@parakh.gov.in` | **Password**: `ControllerPass123`
+  * **Capability**: Generate blueprints, cryptographically seal papers, issue official certificates.
+* **Academic Auditor**:
+  * **Email**: `auditor@parakh.gov.in` | **Password**: `AuditorPass123`
+  * **Capability**: Review draft questions, accept/reject database items, audit evaluations.
+* **Verifier**:
+  * **Email**: `verifier@parakh.gov.in` | **Password**: `VerifierPass123`
+  * **Capability**: Lock double-blind evaluations, issue certified academic results.
+
+### 3. Exam Center Portal (`Supervisor`)
+* **Email**: `supervisor@parakh.gov.in`
+* **Password**: `SupervisorPass123`
+* **Role**: CCTV monitoring, biometric student logs, incident reports, printing batches control.
+
+---
+
+## 🛠️ System Architecture
+
+```mermaid
+graph TD
+    A[Vite Monorepo] --> B[Student Portal]
+    A --> C[Admin Portal]
+    A --> D[Exam Center Portal]
+    A --> E[Public Verification Portal]
+    
+    B & C & D & E --> F[(Supabase PostgreSQL)]
+    B & C & D & E --> G[Supabase Storage Buckets]
+    B & C & D & E --> H[Deno Edge Functions]
+    
+    H -->|Cryptographic SHA256| I[Simulated Blockchain Anchoring]
+    F -->|RLS Policies| F
+    G -->|RLS Policies| G
 ```
 
-## Run tasks
+### 1. Unified Database Design ([supabase_schema_complete.sql](supabase_schema_complete.sql))
+The database features 20 relational tables, speed indexes, and custom PL/pgSQL database triggers:
+* **Auto-Auditing Trigger**: Automatically tracks every insert, update, or delete in `public.audit_logs`.
+* **Blockchain Anchoring Trigger**: Automatically computes transaction hashes, signatures, and chains block references in `blockchain_records` upon paper generation or certificate issuance.
 
-To build the library use:
+### 2. Secure Storage Buckets
+The ecosystem provisions five security-hardened storage buckets with Row-Level Security (RLS) policies:
+1. `exam-papers` (Private): Only Controllers can upload; only Supervisors can read.
+2. `student-evaluation-payloads` (Private): Only Supervisors can upload; only Auditors can read.
+3. `academic-credentials` (Public Read, Protected Write): Only Verifiers can upload; anyone can read.
+4. `evidence-attachments` (Private): For security malpractice reports.
+5. `candidate-photos` (Public Read): For biometric candidate verification cards.
 
-```sh
-npx nx build pkg1
-```
+### 3. Cryptographic Edge Functions ([supabase_edge_functions.md](supabase_edge_functions.md))
+* `seal-paper`: Verifies Controller credentials, generates SHA-256 hash of paper metadata, locks the exam, and returns the sealed key.
+* `issue-certificate`: Compiles student records, generates official PDF files using Deno `pdf-lib`, uploads them to storage, and anchors them into the blockchain ledger.
+* `verify-document`: Public API that verifies certificate numbers and file hashes against the block chain.
 
-To run any task with Nx use:
+---
 
-```sh
-npx nx <target> <project-name>
-```
+## 💻 Local Setup & Development
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+If you wish to run the entire system locally:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-## Versioning and releasing
+2. **Configure Environment Variables**:
+   Create a `.env` file in each app folder under `apps/` with your Supabase URL and Anon Key:
+   ```env
+   VITE_SUPABASE_URL="https://xapeorzscuwggqqocvsq.supabase.co"
+   VITE_SUPABASE_ANON_KEY="sb_publishable_zctZhq8PRiP3GxhOwr2EkA_B35fngfX..."
+   ```
 
-To version and release the library use
+3. **Run All Apps Simultaneously**:
+   ```bash
+   npx nx run-many -t dev --parallel=4
+   ```
+   Open your browser and navigate between:
+   - Student Portal: `http://localhost:3000`
+   - Public Verification: `http://localhost:3001`
+   - Exam Center Portal: `http://localhost:3002`
+   - Admin Portal: `http://localhost:3003`
 
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Set up CI (non-Github Actions CI)
-
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+4. **Build All Apps**:
+   ```bash
+   npx nx run-many -t build
+   ```
