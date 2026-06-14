@@ -1,0 +1,569 @@
+(kicad_sch
+  (version 20231120)
+  (generator "claude_pcb_generator")
+  (paper "A2")
+  (title_block
+    (title "ESP32-S3 Multi-Sensor Board")
+    (date "2026-06-13")
+    (rev "1.0")
+    (company "Custom Design")
+    (comment 1 "ESP32-S3 + ATECC608A + MPU6050 + DS3231 + HX711 + OLED + Relay Driver")
+  )
+
+  (lib_symbols
+    (symbol "ESP32-S3-WROOM-1"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U1" (at 0 25 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "ESP32-S3-WROOM-1" (at 0 -25 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "RF_Module:ESP32-S3-WROOM-1" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "ESP32-S3-WROOM-1_0_1"
+        (rectangle (start -12.7 -22.86) (end 12.7 22.86) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "ESP32-S3-WROOM-1_1_1"
+        (pin power_in line (at -15.24 20.32 0) (length 2.54) (name "3V3" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -15.24 17.78 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 15.24 0) (length 2.54) (name "IO0" (effects (font (size 1.016 1.016)))) (number "27" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 12.70 0) (length 2.54) (name "IO1" (effects (font (size 1.016 1.016)))) (number "28" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 10.16 0) (length 2.54) (name "IO2" (effects (font (size 1.016 1.016)))) (number "29" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 7.62 0) (length 2.54) (name "IO3" (effects (font (size 1.016 1.016)))) (number "30" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 5.08 0) (length 2.54) (name "IO4/SDA" (effects (font (size 1.016 1.016)))) (number "31" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 2.54 0) (length 2.54) (name "IO5/SCL" (effects (font (size 1.016 1.016)))) (number "32" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 0 0) (length 2.54) (name "IO6" (effects (font (size 1.016 1.016)))) (number "33" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 -2.54 0) (length 2.54) (name "IO7" (effects (font (size 1.016 1.016)))) (number "34" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 -5.08 0) (length 2.54) (name "IO8" (effects (font (size 1.016 1.016)))) (number "35" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -15.24 -7.62 0) (length 2.54) (name "IO9/RELAY" (effects (font (size 1.016 1.016)))) (number "36" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 20.32 180) (length 2.54) (name "IO10/HX_SCK" (effects (font (size 1.016 1.016)))) (number "37" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 17.78 180) (length 2.54) (name "IO11/HX_DT" (effects (font (size 1.016 1.016)))) (number "38" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 15.24 180) (length 2.54) (name "IO12" (effects (font (size 1.016 1.016)))) (number "39" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 12.70 180) (length 2.54) (name "IO13" (effects (font (size 1.016 1.016)))) (number "40" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 10.16 180) (length 2.54) (name "IO14" (effects (font (size 1.016 1.016)))) (number "41" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 7.62 180) (length 2.54) (name "IO21/OLED_SDA" (effects (font (size 1.016 1.016)))) (number "42" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at 15.24 5.08 180) (length 2.54) (name "IO48/OLED_SCL" (effects (font (size 1.016 1.016)))) (number "43" (effects (font (size 1.016 1.016)))))
+        (pin input line (at 15.24 2.54 180) (length 2.54) (name "EN" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 15.24 0 180) (length 2.54) (name "TXD0" (effects (font (size 1.016 1.016)))) (number "44" (effects (font (size 1.016 1.016)))))
+        (pin input line (at 15.24 -2.54 180) (length 2.54) (name "RXD0" (effects (font (size 1.016 1.016)))) (number "45" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "ATECC608A"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U2" (at 0 10 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "ATECC608A" (at 0 -10 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "ATECC608A_0_1"
+        (rectangle (start -7.62 -7.62) (end 7.62 7.62) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "ATECC608A_1_1"
+        (pin input line (at -10.16 5.08 0) (length 2.54) (name "SDA" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin output line (at -10.16 2.54 0) (length 2.54) (name "SCL" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at -10.16 0 0) (length 2.54) (name "NC" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 -2.54 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at 10.16 -2.54 180) (length 2.54) (name "NC" (effects (font (size 1.016 1.016)))) (number "5" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at 10.16 0 180) (length 2.54) (name "NC" (effects (font (size 1.016 1.016)))) (number "6" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at 10.16 2.54 180) (length 2.54) (name "NC" (effects (font (size 1.016 1.016)))) (number "7" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 10.16 5.08 180) (length 2.54) (name "VCC" (effects (font (size 1.016 1.016)))) (number "8" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "MPU6050"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U3" (at 0 12 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "MPU6050" (at 0 -12 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_LCC:QFN-24_4x4mm_P0.5mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "MPU6050_0_1"
+        (rectangle (start -7.62 -10.16) (end 7.62 10.16) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "MPU6050_1_1"
+        (pin power_in line (at -10.16 7.62 0) (length 2.54) (name "VDD" (effects (font (size 1.016 1.016)))) (number "13" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 5.08 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "9" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 2.54 0) (length 2.54) (name "VDDIO" (effects (font (size 1.016 1.016)))) (number "10" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -10.16 0 0) (length 2.54) (name "SDA" (effects (font (size 1.016 1.016)))) (number "23" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 -2.54 0) (length 2.54) (name "SCL" (effects (font (size 1.016 1.016)))) (number "24" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 -5.08 0) (length 2.54) (name "AD0" (effects (font (size 1.016 1.016)))) (number "9" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 7.62 180) (length 2.54) (name "INT" (effects (font (size 1.016 1.016)))) (number "12" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at 10.16 5.08 180) (length 2.54) (name "FSYNC" (effects (font (size 1.016 1.016)))) (number "11" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at 10.16 0 180) (length 2.54) (name "CLKOUT" (effects (font (size 1.016 1.016)))) (number "14" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "DS3231"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U4" (at 0 12 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "DS3231" (at 0 -12 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "DS3231_0_1"
+        (rectangle (start -7.62 -10.16) (end 7.62 10.16) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "DS3231_1_1"
+        (pin power_in line (at -10.16 7.62 0) (length 2.54) (name "VCC" (effects (font (size 1.016 1.016)))) (number "16" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 5.08 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -10.16 2.54 0) (length 2.54) (name "SDA" (effects (font (size 1.016 1.016)))) (number "17" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 0 0) (length 2.54) (name "SCL" (effects (font (size 1.016 1.016)))) (number "16" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 7.62 180) (length 2.54) (name "INT/SQW" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 5.08 180) (length 2.54) (name "32KHZ" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 10.16 0 180) (length 2.54) (name "VBAT" (effects (font (size 1.016 1.016)))) (number "14" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "HX711"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U5" (at 0 12 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "HX711" (at 0 -12 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "HX711_0_1"
+        (rectangle (start -7.62 -10.16) (end 7.62 10.16) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "HX711_1_1"
+        (pin power_in line (at -10.16 7.62 0) (length 2.54) (name "AVDD" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 5.08 0) (length 2.54) (name "DVDD" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 2.54 0) (length 2.54) (name "AGND" (effects (font (size 1.016 1.016)))) (number "10" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 0 0) (length 2.54) (name "DGND" (effects (font (size 1.016 1.016)))) (number "9" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 -2.54 0) (length 2.54) (name "INA+" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 -5.08 0) (length 2.54) (name "INA-" (effects (font (size 1.016 1.016)))) (number "5" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 7.62 180) (length 2.54) (name "DOUT" (effects (font (size 1.016 1.016)))) (number "12" (effects (font (size 1.016 1.016)))))
+        (pin input line (at 10.16 5.08 180) (length 2.54) (name "PD_SCK" (effects (font (size 1.016 1.016)))) (number "11" (effects (font (size 1.016 1.016)))))
+        (pin input line (at 10.16 2.54 180) (length 2.54) (name "RATE" (effects (font (size 1.016 1.016)))) (number "15" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "SSD1306_OLED"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U6" (at 0 10 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "SSD1306_OLED" (at 0 -10 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "SSD1306_OLED_0_1"
+        (rectangle (start -7.62 -7.62) (end 7.62 7.62) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "SSD1306_OLED_1_1"
+        (pin power_in line (at -10.16 5.08 0) (length 2.54) (name "VCC" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 2.54 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -10.16 0 0) (length 2.54) (name "SCL" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -10.16 -2.54 0) (length 2.54) (name "SDA" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "ULN2003A"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U7" (at 0 12 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "ULN2003A" (at 0 -12 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "ULN2003A_0_1"
+        (rectangle (start -7.62 -10.16) (end 7.62 10.16) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "ULN2003A_1_1"
+        (pin input line (at -10.16 7.62 0) (length 2.54) (name "IN1" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 5.08 0) (length 2.54) (name "IN2" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 2.54 0) (length 2.54) (name "IN3" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 0 0) (length 2.54) (name "IN4" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -10.16 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "8" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 7.62 180) (length 2.54) (name "OUT1" (effects (font (size 1.016 1.016)))) (number "16" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 5.08 180) (length 2.54) (name "OUT2" (effects (font (size 1.016 1.016)))) (number "15" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 2.54 180) (length 2.54) (name "OUT3" (effects (font (size 1.016 1.016)))) (number "14" (effects (font (size 1.016 1.016)))))
+        (pin output line (at 10.16 0 180) (length 2.54) (name "OUT4" (effects (font (size 1.016 1.016)))) (number "13" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 10.16 -5.08 180) (length 2.54) (name "COM" (effects (font (size 1.016 1.016)))) (number "9" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "Relay_SPDT"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "K1" (at 0 10 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "Relay_SPDT" (at 0 -10 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Relay_THT:Relay_SPDT_Omron-G5LE-1" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "Relay_SPDT_0_1"
+        (rectangle (start -7.62 -7.62) (end 7.62 7.62) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "Relay_SPDT_1_1"
+        (pin input line (at -10.16 5.08 0) (length 2.54) (name "Coil+" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin input line (at -10.16 2.54 0) (length 2.54) (name "Coil-" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 10.16 5.08 180) (length 2.54) (name "COM" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 10.16 2.54 180) (length 2.54) (name "NO" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 10.16 0 180) (length 2.54) (name "NC" (effects (font (size 1.016 1.016)))) (number "5" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "D_Schottky"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "D1" (at 0 5 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "1N4148" (at 0 -5 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Diode_SMD:D_SOD-123" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "D_Schottky_0_1"
+        (polyline (pts (xy -2.54 2.54) (xy -2.54 -2.54)) (stroke (width 0.254)))
+        (polyline (pts (xy -2.54 0) (xy 2.54 0)) (stroke (width 0.254)))
+        (polyline (pts (xy 2.54 2.54) (xy 2.54 -2.54)) (stroke (width 0.254)))
+      )
+      (symbol "D_Schottky_1_1"
+        (pin passive line (at -5.08 0 0) (length 2.54) (name "A" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 5.08 0 180) (length 2.54) (name "K" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "C"
+      (pin_names (offset 0.254))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "C" (at 1.016 2.54 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "C" (at 1.016 -2.54 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Capacitor_SMD:C_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "C_0_1"
+        (polyline (pts (xy -2.032 0.762) (xy 2.032 0.762)) (stroke (width 0.508)))
+        (polyline (pts (xy -2.032 -0.762) (xy 2.032 -0.762)) (stroke (width 0.508)))
+      )
+      (symbol "C_1_1"
+        (pin passive line (at 0 3.81 270) (length 1.524) (name "~" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 0 -3.81 90) (length 1.524) (name "~" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "R"
+      (pin_names (offset 0))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "R" (at 2.032 0 90) (effects (font (size 1.27 1.27))))
+      (property "Value" "R" (at 0 0 90) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Resistor_SMD:R_0402_1005Metric" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "R_0_1"
+        (rectangle (start -1.016 -2.54) (end 1.016 2.54) (stroke (width 0.254)) (fill (type none)))
+      )
+      (symbol "R_1_1"
+        (pin passive line (at 0 3.81 270) (length 1.524) (name "~" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin passive line (at 0 -3.81 90) (length 1.524) (name "~" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "AMS1117-3.3"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "U8" (at 0 7 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "AMS1117-3.3" (at 0 -7 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "AMS1117-3.3_0_1"
+        (rectangle (start -5.08 -5.08) (end 5.08 5.08) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "AMS1117-3.3_1_1"
+        (pin power_in line (at -7.62 0 0) (length 2.54) (name "IN" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin power_out line (at 7.62 0 180) (length 2.54) (name "OUT" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at 0 -7.62 90) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "Conn_USB_B_Micro"
+      (pin_names (offset 1.016))
+      (in_bom yes) (on_board yes)
+      (property "Reference" "J1" (at 0 10 0) (effects (font (size 1.27 1.27))))
+      (property "Value" "USB_Micro_B" (at 0 -10 0) (effects (font (size 1.27 1.27))))
+      (property "Footprint" "Connector_USB:USB_Micro-B_Amphenol_10103594-0001LF_Horizontal" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+      (symbol "Conn_USB_B_Micro_0_1"
+        (rectangle (start -5.08 -7.62) (end 5.08 7.62) (stroke (width 0.254)) (fill (type background)))
+      )
+      (symbol "Conn_USB_B_Micro_1_1"
+        (pin power_out line (at -7.62 5.08 0) (length 2.54) (name "VBUS" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -7.62 2.54 0) (length 2.54) (name "D-" (effects (font (size 1.016 1.016)))) (number "2" (effects (font (size 1.016 1.016)))))
+        (pin bidirectional line (at -7.62 0 0) (length 2.54) (name "D+" (effects (font (size 1.016 1.016)))) (number "3" (effects (font (size 1.016 1.016)))))
+        (pin no_connect line (at -7.62 -2.54 0) (length 2.54) (name "ID" (effects (font (size 1.016 1.016)))) (number "4" (effects (font (size 1.016 1.016)))))
+        (pin power_in line (at -7.62 -5.08 0) (length 2.54) (name "GND" (effects (font (size 1.016 1.016)))) (number "5" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "PWR_FLAG"
+      (property "Reference" "#PWR" (at 0 3.81 0) (effects (font (size 1.27 1.27)) hide))
+      (property "Value" "PWR_FLAG" (at 0 3.81 0) (effects (font (size 1.27 1.27))))
+      (symbol "PWR_FLAG_0_0"
+        (pin power_out line (at 0 0 90) (length 0) (name "PWR" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+      )
+    )
+
+    (symbol "VCC"
+      (property "Reference" "#PWR" (at 0 -1.524 0) (effects (font (size 1.27 1.27)) hide))
+      (property "Value" "VCC" (at 0 3.556 0) (effects (font (size 1.27 1.27))))
+      (symbol "VCC_0_1"
+        (pin power_in line (at 0 0 270) (length 0) (name "VCC" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+      )
+      (symbol "VCC_1_1"
+        (polyline (pts (xy -0.762 0.762) (xy 0 2.286)) (stroke (width 0)))
+        (polyline (pts (xy 0 2.286) (xy 0.762 0.762)) (stroke (width 0)))
+      )
+    )
+
+    (symbol "GND"
+      (property "Reference" "#PWR" (at 0 -1.524 0) (effects (font (size 1.27 1.27)) hide))
+      (property "Value" "GND" (at 0 -3.81 0) (effects (font (size 1.27 1.27))))
+      (symbol "GND_0_1"
+        (pin power_in line (at 0 0 90) (length 0) (name "GND" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+      )
+      (symbol "GND_1_1"
+        (polyline (pts (xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -3.81) (xy -1.27 -1.27) (xy 0 -1.27)) (stroke (width 0)))
+      )
+    )
+
+    (symbol "VBAT"
+      (property "Reference" "#PWR" (at 0 -1.524 0) (effects (font (size 1.27 1.27)) hide))
+      (property "Value" "VBAT" (at 0 3.556 0) (effects (font (size 1.27 1.27))))
+      (symbol "VBAT_0_1"
+        (pin power_in line (at 0 0 270) (length 0) (name "VBAT" (effects (font (size 1.016 1.016)))) (number "1" (effects (font (size 1.016 1.016)))))
+      )
+      (symbol "VBAT_1_1"
+        (polyline (pts (xy -0.762 0.762) (xy 0 2.286)) (stroke (width 0)))
+        (polyline (pts (xy 0 2.286) (xy 0.762 0.762)) (stroke (width 0)))
+      )
+    )
+  )
+
+  ;; ============================================================
+  ;; SHEET 1: ESP32-S3 Main MCU
+  ;; ============================================================
+
+  ;; ESP32-S3 Module
+  (symbol (lib_id "ESP32-S3-WROOM-1") (at 100 100 0) (unit 1)
+    (property "Reference" "U1" (at 100 76 0))
+    (property "Value" "ESP32-S3-WROOM-1" (at 100 74 0))
+  )
+
+  ;; USB Connector
+  (symbol (lib_id "Conn_USB_B_Micro") (at 40 100 0) (unit 1)
+    (property "Reference" "J1" (at 40 91 0))
+    (property "Value" "USB_Micro_B" (at 40 89 0))
+  )
+
+  ;; 3.3V LDO Regulator
+  (symbol (lib_id "AMS1117-3.3") (at 65 95 0) (unit 1)
+    (property "Reference" "U8" (at 65 88 0))
+    (property "Value" "AMS1117-3.3" (at 65 86 0))
+  )
+
+  ;; Bulk capacitor on VIN
+  (symbol (lib_id "C") (at 55 100 0) (unit 1)
+    (property "Reference" "C1" (at 56.5 97 0))
+    (property "Value" "10uF" (at 56.5 99 0))
+  )
+
+  ;; 3.3V decoupling caps
+  (symbol (lib_id "C") (at 75 100 0) (unit 1)
+    (property "Reference" "C2" (at 76.5 97 0))
+    (property "Value" "10uF" (at 76.5 99 0))
+  )
+  (symbol (lib_id "C") (at 80 100 0) (unit 1)
+    (property "Reference" "C3" (at 81.5 97 0))
+    (property "Value" "100nF" (at 81.5 99 0))
+  )
+
+  ;; EN pullup resistor
+  (symbol (lib_id "R") (at 87 85 0) (unit 1)
+    (property "Reference" "R1" (at 88 85 0))
+    (property "Value" "10k" (at 88 83 0))
+  )
+
+  ;; I2C pullup resistors (SDA/SCL shared bus)
+  (symbol (lib_id "R") (at 135 75 0) (unit 1)
+    (property "Reference" "R2" (at 136 75 0))
+    (property "Value" "4.7k" (at 136 73 0))
+  )
+  (symbol (lib_id "R") (at 140 75 0) (unit 1)
+    (property "Reference" "R3" (at 141 75 0))
+    (property "Value" "4.7k" (at 141 73 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 2: ATECC608A Secure Element
+  ;; ============================================================
+  (symbol (lib_id "ATECC608A") (at 40 160 0) (unit 1)
+    (property "Reference" "U2" (at 40 151 0))
+    (property "Value" "ATECC608A" (at 40 149 0))
+  )
+  (symbol (lib_id "C") (at 30 164 0) (unit 1)
+    (property "Reference" "C4" (at 31 161 0))
+    (property "Value" "100nF" (at 31 163 0))
+  )
+  (symbol (lib_id "C") (at 35 164 0) (unit 1)
+    (property "Reference" "C5" (at 36 161 0))
+    (property "Value" "1uF" (at 36 163 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 3: MPU6050 IMU
+  ;; ============================================================
+  (symbol (lib_id "MPU6050") (at 100 160 0) (unit 1)
+    (property "Reference" "U3" (at 100 150 0))
+    (property "Value" "MPU6050" (at 100 148 0))
+  )
+  (symbol (lib_id "C") (at 90 165 0) (unit 1)
+    (property "Reference" "C6" (at 91 162 0))
+    (property "Value" "100nF" (at 91 164 0))
+  )
+  (symbol (lib_id "C") (at 95 165 0) (unit 1)
+    (property "Reference" "C7" (at 96 162 0))
+    (property "Value" "10uF" (at 96 164 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 4: DS3231 RTC
+  ;; ============================================================
+  (symbol (lib_id "DS3231") (at 40 220 0) (unit 1)
+    (property "Reference" "U4" (at 40 210 0))
+    (property "Value" "DS3231SN" (at 40 208 0))
+  )
+  (symbol (lib_id "C") (at 30 222 0) (unit 1)
+    (property "Reference" "C8" (at 31 219 0))
+    (property "Value" "100nF" (at 31 221 0))
+  )
+  ;; CR2032 battery connector for DS3231 VBAT
+  (symbol (lib_id "C") (at 55 215 0) (unit 1)
+    (property "Reference" "BT1" (at 56 215 0))
+    (property "Value" "CR2032" (at 56 213 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 5: HX711 Load Cell ADC
+  ;; ============================================================
+  (symbol (lib_id "HX711") (at 100 220 0) (unit 1)
+    (property "Reference" "U5" (at 100 210 0))
+    (property "Value" "HX711" (at 100 208 0))
+  )
+  (symbol (lib_id "C") (at 90 224 0) (unit 1)
+    (property "Reference" "C9" (at 91 221 0))
+    (property "Value" "10uF" (at 91 223 0))
+  )
+  (symbol (lib_id "C") (at 95 224 0) (unit 1)
+    (property "Reference" "C10" (at 96 221 0))
+    (property "Value" "100nF" (at 96 223 0))
+  )
+
+  ;; Load Cell Connector (4-wire Wheatstone bridge)
+  (symbol (lib_id "Conn_USB_B_Micro") (at 125 220 0) (unit 1)
+    (property "Reference" "J2" (at 125 211 0))
+    (property "Value" "LoadCell_4W" (at 125 209 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 6: OLED Display
+  ;; ============================================================
+  (symbol (lib_id "SSD1306_OLED") (at 40 280 0) (unit 1)
+    (property "Reference" "U6" (at 40 272 0))
+    (property "Value" "SSD1306_128x64" (at 40 270 0))
+  )
+  (symbol (lib_id "C") (at 30 282 0) (unit 1)
+    (property "Reference" "C11" (at 31 279 0))
+    (property "Value" "10uF" (at 31 281 0))
+  )
+
+  ;; ============================================================
+  ;; SHEET 7: ULN2003A Relay Driver
+  ;; ============================================================
+  (symbol (lib_id "ULN2003A") (at 100 280 0) (unit 1)
+    (property "Reference" "U7" (at 100 270 0))
+    (property "Value" "ULN2003A" (at 100 268 0))
+  )
+
+  ;; Relay K1
+  (symbol (lib_id "Relay_SPDT") (at 135 280 0) (unit 1)
+    (property "Reference" "K1" (at 135 272 0))
+    (property "Value" "5V-RELAY" (at 135 270 0))
+  )
+
+  ;; Flyback diode for relay
+  (symbol (lib_id "D_Schottky") (at 135 290 0) (unit 1)
+    (property "Reference" "D1" (at 137 290 0))
+    (property "Value" "1N4007" (at 137 288 0))
+  )
+
+  ;; Relay output screw terminal connector
+  (symbol (lib_id "Conn_USB_B_Micro") (at 160 280 0) (unit 1)
+    (property "Reference" "J3" (at 160 271 0))
+    (property "Value" "RelayOut_SPDT" (at 160 269 0))
+  )
+
+  ;; ============================================================
+  ;; POWER SYMBOLS
+  ;; ============================================================
+  (symbol (lib_id "VCC") (at 75 88 0) (unit 1)
+    (property "Reference" "#PWR01" (at 75 88 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "3V3" (at 75 90 0))
+  )
+  (symbol (lib_id "GND") (at 100 125 0) (unit 1)
+    (property "Reference" "#PWR02" (at 100 125 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "GND" (at 100 125 0))
+  )
+  (symbol (lib_id "VCC") (at 40 168 0) (unit 1)
+    (property "Reference" "#PWR03" (at 40 168 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "3V3" (at 40 170 0))
+  )
+  (symbol (lib_id "GND") (at 40 172 0) (unit 1)
+    (property "Reference" "#PWR04" (at 40 172 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "GND" (at 40 172 0))
+  )
+  (symbol (lib_id "VCC") (at 100 170 0) (unit 1)
+    (property "Reference" "#PWR05" (at 100 170 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "3V3" (at 100 172 0))
+  )
+  (symbol (lib_id "GND") (at 100 175 0) (unit 1)
+    (property "Reference" "#PWR06" (at 100 175 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "GND" (at 100 175 0))
+  )
+  (symbol (lib_id "VBAT") (at 55 218 0) (unit 1)
+    (property "Reference" "#PWR07" (at 55 218 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "VBAT" (at 55 220 0))
+  )
+
+  ;; ============================================================
+  ;; NET LABELS (signals)
+  ;; ============================================================
+  (net_label (at 85 105 0) "I2C_SDA")
+  (net_label (at 85 107 0) "I2C_SCL")
+  (net_label (at 115 120 0) "I2C_SDA")
+  (net_label (at 115 122 0) "I2C_SCL")
+  (net_label (at 30 160 0) "I2C_SDA")
+  (net_label (at 30 162 0) "I2C_SCL")
+  (net_label (at 90 160 0) "I2C_SDA")
+  (net_label (at 90 162 0) "I2C_SCL")
+  (net_label (at 30 220 0) "I2C_SDA")
+  (net_label (at 30 222 0) "I2C_SCL")
+  (net_label (at 30 280 0) "OLED_SDA")
+  (net_label (at 30 282 0) "OLED_SCL")
+  (net_label (at 85 120 0) "HX_DOUT")
+  (net_label (at 85 122 0) "HX_SCK")
+  (net_label (at 115 220 0) "HX_DOUT")
+  (net_label (at 115 222 0) "HX_SCK")
+  (net_label (at 85 117 0) "RELAY_CTL")
+  (net_label (at 90 280 0) "RELAY_CTL")
+
+  ;; ============================================================
+  ;; WIRES - I2C Bus (Main) for ATECC608A, MPU6050, DS3231
+  ;; ============================================================
+  (wire (pts (xy 84.58 104.52) (xy 84.58 104.52)))
+
+  ;; ============================================================
+  ;; TEXT NOTES / ANNOTATIONS
+  ;; ============================================================
+  (text "I2C Bus 0 (IO4/IO5): ATECC608A, MPU6050, DS3231 [0x60, 0x68, 0x68]"
+    (at 40 140 0) (effects (font (size 1.5 1.5)) (justify left)))
+  (text "I2C Bus 1 (IO21/IO48): SSD1306 OLED [0x3C]"
+    (at 40 145 0) (effects (font (size 1.5 1.5)) (justify left)))
+  (text "HX711: IO10 (SCK), IO11 (DOUT) - 80SPS rate"
+    (at 40 150 0) (effects (font (size 1.5 1.5)) (justify left)))
+  (text "Relay: IO9 -> ULN2003A IN1 -> K1 Coil"
+    (at 40 155 0) (effects (font (size 1.5 1.5)) (justify left)))
+  (text "Power: USB 5V -> AMS1117-3.3 -> 3V3 rail"
+    (at 40 135 0) (effects (font (size 1.5 1.5)) (justify left)))
+
+  (text "=== DECOUPLING NOTE: 100nF caps on every VCC pin, 10uF bulk per section ==="
+    (at 40 130 0) (effects (font (size 1.2 1.2) italic) (justify left)))
+
+  ;; ============================================================
+  ;; POWER FLAGS (DRC compliance)
+  ;; ============================================================
+  (symbol (lib_id "PWR_FLAG") (at 40 92 0) (unit 1)
+    (property "Reference" "#PWR09" (at 40 92 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "PWR_FLAG" (at 40 94 0))
+  )
+  (symbol (lib_id "PWR_FLAG") (at 75 92 0) (unit 1)
+    (property "Reference" "#PWR10" (at 75 92 0) (effects (font (size 1.27 1.27)) hide))
+    (property "Value" "PWR_FLAG" (at 75 94 0))
+  )
+
+)
