@@ -35,64 +35,64 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 
 ---
 
-### 1. 🎓 Student Portal
+### 1. Student Portal
 > Access results, check schedules, and download certified academic marksheets & migration certificates.
 * **Live Deployment Link**: 
   [![Student Portal Deployed](https://img.shields.io/badge/Launch-Student_Portal-61DAFB?style=for-the-badge&logo=vercel&logoColor=black)](https://parakh-student.vercel.app) *(Update URL with your deployed link)*
 * **Key Features**:
-  * 📜 View digital certificates, transcripts, and migration records.
-  * ⬇️ Export high-fidelity PDFs with digital signature verification codes.
-  * 🔔 Real-time notifications for published results and validation requests.
+  * View digital certificates, transcripts, and migration records.
+  * Export high-fidelity PDFs with digital signature verification codes.
+  * Real-time notifications for published results and validation requests.
 
 ---
 
-### 2. 💼 Admin & Central Command Portal
+### 2. Admin & Central Command Portal
 > Design blueprints, review question banks, securely seal papers, and audit evaluation pipelines.
 * **Live Deployment Link**: 
   [![Admin Portal Deployed](https://img.shields.io/badge/Launch-Admin_Portal-143055?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-admin.vercel.app) *(Update URL with your deployed link)*
 * **Key Features**:
-  * ✍️ Question creator and reviewer panels with workflow status tags.
-  * 📐 Blueprint builder to generate balanced exam question papers.
-  * 🔏 **Sealing Vault**: Controller dashboard to cryptographically freeze papers and trigger blockchain hashes.
+  * Question creator and reviewer panels with workflow status tags.
+  * Blueprint builder to generate balanced exam question papers.
+  * **Sealing Vault**: Controller dashboard to cryptographically freeze papers and trigger blockchain hashes.
 
 ---
 
-### 3. 🏫 Physical Exam Center Portal
+### 3. Physical Exam Center Portal
 > Local dashboard for Chief Superintendents and Observers to manage local operations securely.
 * **Live Deployment Link**: 
   [![Exam Center Portal Deployed](https://img.shields.io/badge/Launch-Exam_Center_Portal-38B2AC?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-exam-center.vercel.app) *(Update URL with your deployed link)*
 * **Key Features**:
-  * 🪪 Biometric & Aadhaar e-KYC candidates check-in logging.
-  * 🚨 Jammer logs & RF network sniffing sensor monitoring.
-  * 🖨️ Secure print control manager with printer log auditing.
+  * Biometric & Aadhaar e-KYC candidates check-in logging.
+  * Jammer logs & RF network sniffing sensor monitoring.
+  * Secure print control manager with printer log auditing.
 
 ---
 
-### 4. 🔍 Public Verification Portal
+### 4. Public Verification Portal
 > Open-access verification hub for universities, employers, and credentials validators.
 * **Live Deployment Link**: 
   [![Public Verification Deployed](https://img.shields.io/badge/Launch-Public_Verification-3ECF8E?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-public-verification.vercel.app) *(Update URL with your deployed link)*
 * **Key Features**:
-  * 🔍 Roll number & certificate ID instant lookup.
-  * 📄 **Drag-and-Drop Validator**: Upload certificate PDFs to detect any tamper or byte modifications instantly against blockchain hashes.
+  * Roll number & certificate ID instant lookup.
+  * **Drag-and-Drop Validator**: Upload certificate PDFs to detect any tamper or byte modifications instantly against blockchain hashes.
 
 ---
 
-## 🔑 Demo Credentials (For Evaluation)
+## Demo Credentials (For Evaluation)
 
 Log in as different participants using these pre-seeded testing accounts:
 
 | Role | Portal | Test Email | Password | Clearance / Privileges |
 | :--- | :--- | :--- | :--- | :--- |
-| **Student** | 🎓 Student | `student@parakh.gov.in` | `StudentPass123` | View own scores, download certificates. |
-| **Controller** | 💼 Admin | `controller@parakh.gov.in` | `ControllerPass123` | **Clearance Level 3**: Seal papers, issue certificates. |
-| **Auditor** | 💼 Admin | `auditor@parakh.gov.in` | `AuditorPass123` | **Clearance Level 2**: Review questions, audit uploads. |
-| **Verifier** | 💼 Admin | `verifier@parakh.gov.in` | `VerifierPass123` | **Clearance Level 1**: Issue result locks. |
-| **Supervisor** | 🏫 Exam Center | `supervisor@parakh.gov.in` | `SupervisorPass123` | CCTV monitoring, candidate check-ins, printing. |
+| **Student** | Student | `student@parakh.gov.in` | `StudentPass123` | View own scores, download certificates. |
+| **Controller** | Admin | `controller@parakh.gov.in` | `ControllerPass123` | **Clearance Level 3**: Seal papers, issue certificates. |
+| **Auditor** | Admin | `auditor@parakh.gov.in` | `AuditorPass123` | **Clearance Level 2**: Review questions, audit uploads. |
+| **Verifier** | Admin | `verifier@parakh.gov.in` | `VerifierPass123` | **Clearance Level 1**: Issue result locks. |
+| **Supervisor** | Exam Center | `supervisor@parakh.gov.in` | `SupervisorPass123` | CCTV monitoring, candidate check-ins, printing. |
 
 ---
 
-## 🛡️ Technical Architecture & Security Model
+## Technical Architecture & Security Model
 
 ```mermaid
 flowchart TB
@@ -125,23 +125,23 @@ flowchart TB
 
 ---
 
-## 💻 Modules Deep Dive
+## Modules Deep Dive
 
 ---
 
-### 1. 🎓 Student Portal Module (`apps/parakh-student-portal`)
+### 1. Student Portal Module (`apps/parakh-student-portal`)
 
 The Student Portal serves as a secure, authenticated interface for candidates to view active exam schedules, check published grades, and download certified academic marksheets & transcripts signed cryptographically.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Student as 🎓 Student Candidate
-    participant Portal as 🖥️ Student Portal Client<br/>(React/Vite)
-    participant Supabase as ⚡ Supabase Auth & DB
-    participant Deno as ⚙️ Deno Edge Function<br/>(issue-certificate)
-    participant Storage as 📦 Storage Bucket<br/>(academic-credentials)
-    participant Ledger as 🔗 Blockchain Ledger<br/>(blockchain_records)
+    actor Student as Student Candidate
+    participant Portal as Student Portal Client<br/>(React/Vite)
+    participant Supabase as Supabase Auth & DB
+    participant Deno as Deno Edge Function<br/>(issue-certificate)
+    participant Storage as Storage Bucket<br/>(academic-credentials)
+    participant Ledger as Blockchain Ledger<br/>(blockchain_records)
 
     Student->>Portal: Authenticates via login
     Portal->>Supabase: Session authorization check (JWT)
@@ -187,7 +187,7 @@ sequenceDiagram
 
 ---
 
-### 2. 💼 Admin & Central Command Module (`apps/parakh-admin-portal`)
+### 2. Admin & Central Command Module (`apps/parakh-admin-portal`)
 
 The central command dashboard used by Board Controllers, Question Reviewers, and Verification Registrars to author question pools, build syllabus blueprints, generate secure exam papers, audit double-blind grading pipelines, and inspect blockchain transaction logs.
 
@@ -252,7 +252,7 @@ flowchart TD
 
 ---
 
-### 3. 🏫 Physical Exam Center Module (`apps/parakh-exam-center-portal`)
+### 3. Physical Exam Center Module (`apps/parakh-exam-center-portal`)
 
 A security-hardened local hub deployed in physical exam halls, managed by Chief Supervisors and Observers to coordinate candidates admission, run wireless signal scans, and decrypt paper packets minutes before testing.
 
