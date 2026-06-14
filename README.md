@@ -1,6 +1,6 @@
 # PARAKH - Ecosystem
-##### Proactive Assessment and Result Audit for Knowledge & Honesty
-### Secure, Transparent & Blockchain-Anchored Board Examination Management System
+### Proactive Assessment and Result Audit for Knowledge & Honesty
+##### Secure, Transparent & Blockchain-Anchored Board Examination Management System
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" alt="Nx Monorepo Logo" width="100" />
