@@ -38,7 +38,7 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 ### 1. 🎓 Student Portal
 > Access results, check schedules, and download certified academic marksheets & migration certificates.
 * **Live Deployment Link**: 
-  [![Student Portal Deployed](https://img.shields.io/badge/Launch-Student_Portal-61DAFB?style=for-the-badge&logo=vercel&logoColor=black)](https://parakh-student.vercel.app) *(Update URL with your deployed link)*
+  [![Student Portal Deployed](https://img.shields.io/badge/Launch-Student_Portal-61DAFB?style=for-the-badge&logo=vercel&logoColor=black)](https://parakh-student.vercel.app)
 * **Key Features**:
   * 📜 View digital certificates, transcripts, and migration records.
   * ⬇️ Export high-fidelity PDFs with digital signature verification codes.
@@ -49,7 +49,7 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 ### 2. 💼 Admin & Central Command Portal
 > Design blueprints, review question banks, securely seal papers, and audit evaluation pipelines.
 * **Live Deployment Link**: 
-  [![Admin Portal Deployed](https://img.shields.io/badge/Launch-Admin_Portal-143055?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-admin.vercel.app) *(Update URL with your deployed link)*
+  [![Admin Portal Deployed](https://img.shields.io/badge/Launch-Admin_Portal-143055?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-admin.vercel.app)
 * **Key Features**:
   * ✍️ Question creator and reviewer panels with workflow status tags.
   * 📐 Blueprint builder to generate balanced exam question papers.
@@ -60,7 +60,7 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 ### 3. 🏫 Physical Exam Center Portal
 > Local dashboard for Chief Superintendents and Observers to manage local operations securely.
 * **Live Deployment Link**: 
-  [![Exam Center Portal Deployed](https://img.shields.io/badge/Launch-Exam_Center_Portal-38B2AC?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-exam-center.vercel.app) *(Update URL with your deployed link)*
+  [![Exam Center Portal Deployed](https://img.shields.io/badge/Launch-Exam_Center_Portal-38B2AC?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-exam-center.vercel.app)
 * **Key Features**:
   * 🪪 Biometric & Aadhaar e-KYC candidates check-in logging.
   * 🚨 Jammer logs & RF network sniffing sensor monitoring.
@@ -71,7 +71,7 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 ### 4. 🔍 Public Verification Portal
 > Open-access verification hub for universities, employers, and credentials validators.
 * **Live Deployment Link**: 
-  [![Public Verification Deployed](https://img.shields.io/badge/Launch-Public_Verification-3ECF8E?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-public-verification.vercel.app) *(Update URL with your deployed link)*
+  [![Public Verification Deployed](https://img.shields.io/badge/Launch-Public_Verification-3ECF8E?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-public-verification.vercel.app)
 * **Key Features**:
   * 🔍 Roll number & certificate ID instant lookup.
   * 📄 **Drag-and-Drop Validator**: Upload certificate PDFs to detect any tamper or byte modifications instantly against blockchain hashes.
