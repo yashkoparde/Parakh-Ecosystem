@@ -89,3 +89,40 @@ body {
   0% { opacity: 0; transform: translateY(4px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+/* --- Mini-Character Swing Keyframes for Walking Cycle --- */
+@keyframes swing-leg {
+  0%, 100% { transform: rotate(-25deg); }
+  50% { transform: rotate(25deg); }
+}
+
+@keyframes swing-leg-reverse {
+  0%, 100% { transform: rotate(25deg); }
+  50% { transform: rotate(-25deg); }
+}
+
+@keyframes swing-arm {
+  0%, 100% { transform: rotate(-20deg); }
+  50% { transform: rotate(20deg); }
+}
+
+@keyframes swing-arm-reverse {
+  0%, 100% { transform: rotate(20deg); }
+  50% { transform: rotate(-20deg); }
+}
+
+.animate-swing-leg {
+  animation: swing-leg 0.6s infinite ease-in-out;
+}
+
+.animate-swing-leg-reverse {
+  animation: swing-leg-reverse 0.6s infinite ease-in-out;
+}
+
+.animate-swing-arm {
+  animation: swing-arm 0.6s infinite ease-in-out;
+}
+
+.animate-swing-arm-reverse {
+  animation: swing-arm-reverse 0.6s infinite ease-in-out;
+}
