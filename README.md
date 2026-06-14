@@ -129,148 +129,203 @@ flowchart TB
 
 ---
 
-### 1. 🎓 Student Portal Module
+### 1. 🎓 Student Portal Module (`apps/parakh-student-portal`)
 
-The Student Portal serves as the secure interface for candidates to view details, verify documents, and download official credentials.
+The Student Portal serves as a secure, authenticated interface for candidates to view active exam schedules, check published grades, and download certified academic marksheets & transcripts signed cryptographically.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Student
-    participant Portal as Student Client App
-    participant DB as Supabase DB
-    participant Storage as Supabase Storage
-    participant Edge as Edge Function (issue-certificate)
+    actor Student as 🎓 Student Candidate
+    participant Portal as 🖥️ Student Portal Client<br/>(React/Vite)
+    participant Supabase as ⚡ Supabase Auth & DB
+    participant Deno as ⚙️ Deno Edge Function<br/>(issue-certificate)
+    participant Storage as 📦 Storage Bucket<br/>(academic-credentials)
+    participant Ledger as 🔗 Blockchain Ledger<br/>(blockchain_records)
 
-    Student->>Portal: Request Transcript/Certificate PDF
-    Portal->>DB: Check student_id record
-    DB-->>Portal: Return metadata & status
-    Portal->>Edge: Trigger PDF generation (auth header)
-    Note over Edge: Renders PDF via pdf-lib<br/>Calculates file SHA-256 hash
-    Edge->>Storage: Upload PDF to 'academic-credentials' bucket
-    Edge->>DB: Insert record (fires blockchain anchor trigger)
-    DB-->>Edge: Returns transaction hashes
-    Edge-->>Portal: Returns signed PDF metadata & path
-    Portal->>Student: Render Viewer & Download PDF
+    Student->>Portal: Authenticates via login
+    Portal->>Supabase: Session authorization check (JWT)
+    Supabase-->>Portal: Returns Auth Token (Bearer JWT)
+    
+    Student->>Portal: Accesses "Certificates Matrix"
+    Portal->>Supabase: Query certificates table (enforced by RLS)
+    Note over Supabase: RLS Enforced:<br/>student_id = auth.uid()
+    Supabase-->>Portal: Returns verified certificate rows
+    
+    Student->>Portal: Clicks "Download Signed PDF"
+    Portal->>Deno: Trigger issue-certificate (includes JWT token)
+    Note over Deno: Authenticates caller & role via getUser()<br/>Queries student record metadata<br/>Compiles PDF layout via esm.sh/pdf-lib
+    Deno->>Storage: Uploads compiled PDF bytes to certs/ directory
+    Deno->>Supabase: Inserts record in certificates table
+    Note over Supabase: Trigger fires:<br/>tr_blockchain_anchor_cert
+    Supabase->>Ledger: Appends immutable block record<br/>(Generates block_number, signature, tx_hash)
+    Ledger-->>Supabase: Returns transaction details
+    Supabase-->>Deno: Confirms record & trigger execution
+    Deno-->>Portal: Returns PDF URL & verification path
+    Portal->>Student: Initiates PDF file download
 ```
 
-#### A. Architecture
-* **Isolated Queries via Row-Level Security (RLS)**: Enforces `student_id = auth.uid()` on tables `public.results` and `public.certificates` so that students can access only their own records.
-* **PDF Engine**: Client-side marksheet styling paired with serverless `issue-certificate` Deno function to ensure official PDF files are generated securely on the server-side.
+#### A. Code & File Architecture
+* **[`src/components/Dashboard.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/Dashboard.tsx)**: Main dashboard console. Compiles candidate metadata, active notifications feed, and exam schedule tickers.
+* **[`src/components/ResultsModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/ResultsModule.tsx) & [`ResultDetail.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/ResultDetail.tsx)**: Pulls data from the `results` table. Plots marks in dynamic visual charts, calculates SGPA averages, and maps result transactions to blockchain hashes (`tx_hash`).
+* **[`src/components/CertificatesModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/CertificatesModule.tsx) & [`CertificateDetail.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/CertificateDetail.tsx)**: Displays the student's personal credential wallet, enabling users to request PDF generation from the `issue-certificate` Deno Edge Function.
+* **[`src/components/ExaminationsModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/ExaminationsModule.tsx)**: Renders digital hall tickets, schedules, subject timelines, and supervisor contact entries.
+* **[`src/components/VerificationModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/VerificationModule.tsx)**: Logs third-party credentials lookups requested by external employers or universities from `verification_requests` to provide candidates transparency over who verified their data.
+* **[`src/components/ProfileView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/ProfileView.tsx)**: Displays full candidate profile metadata (`students` table), including DOB, school name, and masked Aadhaar reference codes (`aadhaar_reference`).
+* **[`src/components/NotificationsView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/NotificationsView.tsx)**: Displays dynamic system alerts, result publication notifications, and credential issuance logs.
+* **[`src/components/SupportView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-student-portal/src/components/SupportView.tsx)**: Candidate assistance and ticket logging console.
 
-#### B. Working Flow
-1. **Dashboard Check**: The student reviews their active schedules and check-in statuses.
-2. **Result Compilation**: Subject scores are returned from `public.results` as a JSON array and plotted dynamically into grade bar graphs.
-3. **Download Certificate**: The student clicks download, executing the `issue-certificate` API, saving the final PDF in the S3 bucket, and returning the file with a QR verification code.
-
-#### C. Core Features
-* **Interactive marksheets** (grade bar charts, dynamic pass/fail gauges).
-* **Document wallet** (Degrees, transcripts, migration certificates).
-* **Audit trail logs** (history of who verified their document).
+#### B. Database Schema & API Integrations
+* **Database Tables**: Reads from `students`, `results`, `certificates`, `blockchain_records`, `verification_requests`, and `notifications`.
+* **Row-Level Security (RLS)**: Enforces isolation so students cannot query other candidates' details:
+  ```sql
+  CREATE POLICY "Student access restriction" 
+  ON public.certificates FOR SELECT 
+  USING (student_id = auth.uid());
+  ```
+* **Edge Function Call**: Dispatches authorized POST requests to `/functions/v1/issue-certificate` with the student ID, document number, name, and certificate type.
 
 ---
 
-### 2. 💼 Admin & Central Command Module
+### 2. 💼 Admin & Central Command Module (`apps/parakh-admin-portal`)
 
-This is the control hub used by board directors, auditors, and registrars to set up exams and securely seal question paper keys.
+The central command dashboard used by Board Controllers, Question Reviewers, and Verification Registrars to author question pools, build syllabus blueprints, generate secure exam papers, audit double-blind grading pipelines, and inspect blockchain transaction logs.
 
 ```mermaid
 flowchart TD
-    subgraph Question Lifecycle
-        Q1[Create Draft] --> Q2[Pending Review]
-        Q2 -->|Auditor Review| Q3[Approved / Rejected]
+    subgraph Drona [1. Question Item Bank & Peer Review]
+        A1[Question Creator] -->|Draft| A2[Auditor Review Docket]
+        A2 -->|Approve/Reject + Comments| A3[(questions Table)]
     end
 
-    subgraph Paper Sealing Vault
-        Q3 --> B1[Blueprint Builder]
-        B1 -->|Define mark ratios & rules| B2[Generate Exam Paper]
-        B2 -->|Controller clicks Seal| E1[Edge Function: seal-paper]
-        E1 -->|Compute SHA-256| P1[(Generated Papers Table)]
-        E1 -->|Write private S3| S1[exam-papers bucket]
-        E1 -->|Anchor Block| L1[(Blockchain Records Table)]
+    subgraph Veda [2. Assembly & Sealing Vault]
+        A3 --> B1[Blueprint Builder]
+        B1 -->|Difficulty Distributions & Marks| B2[Procedural Generation Assembly]
+        B2 -->|Save Revision v1/v2/v3| B3[Review Generated Paper Preview]
+        B3 -->|Controller Clicks Seal| B4[Edge Function: seal-paper]
+        B4 -->|SHA-256 Checksum| B5[(generated_papers Table)]
+        B4 -->|Attach Trigger: tr_blockchain_anchor_paper| B6[(blockchain_records Table)]
     end
+
+    subgraph Mulya [3. Double-Blind Grading Audit]
+        C1[Upload Booklet Scan Package] --> C2[(evaluation_jobs Table)]
+        C2 -->|Assign blind verifiers| C3[Verifiers Input Scores]
+        C3 -->|Double Check Deviations| C4[Lock Evaluation Results]
+        C4 -->|Attach Trigger: tr_blockchain_anchor_result| C5[(results Table)]
+    end
+
+    style B4 fill:#3ECF8E,stroke:#000,stroke-width:2px,color:#000
+    style B6 fill:#646CFF,stroke:#000,stroke-width:2px,color:#fff
+    style C5 fill:#646CFF,stroke:#000,stroke-width:2px,color:#fff
 ```
 
-#### A. Architecture
-* **Role-Based Clearance Controls**:
-  * `ACADEMIC_AUDITOR`: Permissions restricted to checking the `questions` and `blueprints` tables.
-  * `CONTROLLER`: Clearance Level 3, allowing writes to `generated_papers` and key release commands.
-  * `VERIFIER`: Permission restricted to locking double-blind evaluation queues.
+#### A. Code & File Architecture
+* **[`src/components/DashboardModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/DashboardModule.tsx)**: System-wide command center overview, displaying aggregate metrics of online centers, total check-ins, and active exam batches.
+* **[`src/components/DronaModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/DronaModule.tsx)**: Handles the central item bank. Features three tabs: *Question Bank* (lists and filters questions by cognitive compliance level and difficulty), *Review & Approvals* (permits auditors to approve or reject items with mandatory feedback comments), and *Activity Logs* (displays question modifications).
+* **[`src/components/VedaModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/VedaModule.tsx)**: The blueprint constructor and paper assembler. Configures blueprints (Easy, Medium, Hard percentages and Marks) and procedurally compiles papers from approved questions. Contains an amendment versioning editor allowing controllers to replace questions, adjust versions, see diffs, and invoke the Deno `seal-paper` function to lock the exam paper.
+* **[`src/components/MulyaModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/MulyaModule.tsx)**: Double-blind grading workspace. Displays scan lists and deviation metrics (calculating standard deviation `σ` and variance), flags grading discrepancies, and submits final grade commits to lock results.
+* **[`src/components/SakshyaModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/SakshyaModule.tsx)**: Blockchain explorer. Controllers input transaction hashes to query the simulated ledger (`blockchain_records`), revealing block numbers, previous hash links, signatures, and timestamps.
+* **[`src/components/AdminDirectory.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-admin-portal/src/components/AdminDirectory.tsx)**: System directories split into tabs:
+  * *Users*: Manage board personnel, roles (`CONTROLLER`, `SUPERVISOR`, etc.), and hardware MFA status.
+  * *CCTV & Centers*: Capacity details, VPN statuses, and CCTV overrides.
+  * *Syllabus Subjects*: Setup class level (10/12) and chapter count.
+  * *Sys-Logs*: Visual audit logs querying database changes.
+  * *Cryptographic Keys*: Public-key registry for active signing certificates.
 
-#### B. Working Flow
-1. **Question Audit**: The Auditor accepts or rejects newly drafted questions.
-2. **Dynamic Generation**: The Controller inputs standard metrics (time limit, section allocations, easy/medium/hard distribution). The generator queries the question bank and extracts a randomized set matching the rules.
-3. **Vault Sealing**: The Controller enters their digital signature, executing the `seal-paper` function, locking the file in S3, and saving the SHA-256 blockchain proof.
-
-#### C. Core Features
-* **Automatic paper generators** (difficulty balancing, anti-pattern checks).
-* **Double-blind grading dashboard** (allocating scanned booklets to registrars).
-* **Blockchain anchor registry log** (view block history).
+#### B. Database Schema & API Integrations
+* **Database Tables**: Interfaces with `admin_users`, `questions`, `blueprints`, `generated_papers`, `evaluation_jobs`, `results`, `blockchain_records`, and `audit_logs`.
+* **Universal Audit Logger Trigger (`proc_audit_logger`)**:
+  Fires automatically on changes to `questions`, `blueprints`, `generated_papers`, and `results`. It logs JSON diffs containing old and new row values directly into `audit_logs`, tracking administrator behavior:
+  ```sql
+  CREATE OR REPLACE TRIGGER tr_audit_questions
+  AFTER INSERT OR UPDATE OR DELETE ON public.questions
+  FOR EACH ROW EXECUTE FUNCTION public.proc_audit_logger();
+  ```
+* **Blockchain Anchor Trigger (`proc_blockchain_anchor_simulator`)**:
+  Triggered when a result is finalized or an exam paper is sealed, creating a ledger record:
+  ```sql
+  CREATE OR REPLACE TRIGGER tr_blockchain_anchor_paper
+  AFTER INSERT ON public.generated_papers
+  FOR EACH ROW EXECUTE FUNCTION public.proc_blockchain_anchor_simulator();
+  ```
+* **Edge Function Call**: Invokes `/functions/v1/seal-paper` with paper structures, credentials, and center boundaries to lock questions and output paper SHA-256 checksums.
 
 ---
 
-### 3. 🏫 Physical Exam Center Module
+### 3. 🏫 Physical Exam Center Module (`apps/parakh-exam-center-portal`)
 
-This portal operates inside physical examination centers to manage operations securely, verify candidate identities, and prevent leaks.
+A security-hardened local hub deployed in physical exam halls, managed by Chief Supervisors and Observers to coordinate candidates admission, run wireless signal scans, and decrypt paper packets minutes before testing.
 
 ```mermaid
 flowchart LR
-    subgraph Check-in
-        C1[Candidate Aadhaar / Thumbprint] --> C2{Biometric Match?}
-        C2 -->|Yes| C3[Assign seat number & status Checked-in]
-        C2 -->|No| C4[Flag manual override override_incident]
+    subgraph Entrance [1. Biometric Candidate Admission]
+        I1[Candidate ID & Thumbprint Scan] --> I2{Aadhaar e-KYC API}
+        I2 -->|Biometric Match| I3[Check-in Success: Assign Seat]
+        I2 -->|Mismatch / Failure| I4[Flag Incident Report: Impersonation]
+        I3 --> I5[(session_candidates Table)]
     end
 
-    subgraph Decrypt & Print
-        P1[Observer Key] & P2[Supervisor Key] --> D1[Secure Decrypt Key]
-        D1 -->|Fetch from S3| D2[Stream PDF to secure printer]
-        D2 -->|Log count| P3[(print_batches Table)]
+    subgraph Security [2. Signal Anomaly Sniffing]
+        S1[RF sniffer sensors] -->|Frequency & Signal Strength| S2[(device_events Table)]
+        S2 -->|Signal > Threshold| S3[Trigger Alert: Bluetooth/Mobile Detection]
+    end
+
+    subgraph Release [3. Dual-Key Paper Decryption]
+        K1[Supervisor Session Token] & K2[Observer Board Token] --> R1{Decryption Vault}
+        R1 -->|Dual Authorize Approved| R2[Decrypt Paper Package ZIP]
+        R2 -->|Stream to Physical Printer| R3[(print_batches Table)]
+        R3 -->|Print Counts Logged| R4[Prevent Duplicate Printing]
     end
 ```
 
-#### A. Architecture
-* **Decentralized Printing Protocol**: Restricts printing access by requiring dual observer authentication tokens. Papers are streamed as raw print buffers rather than downloadable PDFs to prevent local saving.
-* **Sniffing Sensors Integration**: Submits local RF logs and Bluetooth device entries from hardware sensors directly into the database.
+#### A. Code & File Architecture
+* **[`src/components/DashboardView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/DashboardView.tsx)**: Aggregates real-time stats including candidate check-in counts, jammer signals status, VPN tunnel states, print log warnings, and active security incidents.
+* **[`src/components/CandidateVerificationView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/CandidateVerificationView.tsx) & [`AttendanceView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/AttendanceView.tsx)**: Manages candidate grids. Admits candidates by executing biometric check-in matches against Aadhaar databases, assigning seat maps, and editing attendance records.
+* **[`src/components/PaperReleaseView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/PaperReleaseView.tsx)**: The decryption workbench. Enforces the dual-authorization protocol, requiring the Supervisor and the NTA Observer to enter their clearance keys concurrently to authorize download.
+* **[`src/components/PrintControlView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/PrintControlView.tsx)**: Printer auditor. Coordinates local paper streaming and updates `print_batches` (auditing printer IPs, operator names, and total copies printed) to prevent duplicate paper distribution.
+* **[`src/components/DeviceDetectionView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/DeviceDetectionView.tsx)**: RF scanner console. Logs mobile signals, smartwatches, and Bluetooth transmitters, reporting frequency (MHz) and signal strength (dBm) in `device_events`.
+* **[`src/components/IncidentReportingView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/IncidentReportingView.tsx)**: Malpractice log dashboard. Supervisors report incidents (cheating, impersonation, delays) with critical/warning tags directly into the `incident_reports` table.
+* **[`src/components/IntegrityMonitoringView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/IntegrityMonitoringView.tsx)**: Room-wise CCTV monitor. Simulates video feeds, captures cameras online/offline states, and triggers local lockdowns.
+* **[`src/components/SessionsView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/SessionsView.tsx) & [`StaffView.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-exam-center-portal/src/components/StaffView.tsx)**: Lists scheduled exam shifts and displays authorized center staff profiles.
 
-#### B. Working Flow
-1. **Lockdown Mode**: The Supervisor triggers lockdown, activating signal sensors.
-2. **Student Check-in**: Students present their credentials, checking in with biometric validation.
-3. **Dual Print Release**: The Observer and Supervisor enter their keys. The system decrypts the paper, logs the printer IP, and tracks print counts in the `print_batches` table.
-
-#### C. Core Features
-* **Local jammer & sniffer panels** (RF signal tracking, Bluetooth logs).
-* **Biometric check-in logging** (attendance percentage, seating logs).
-* **Incident reporter** (log impersonation, sheet exchange).
+#### B. Database Schema & API Integrations
+* **Database Tables**: Interacts with `exam_centers`, `center_staff`, `exam_sessions`, `session_candidates`, `print_batches`, `device_events`, and `incident_reports`.
+* **Row-Level Security (RLS)**: Restrains data queries by center boundary policies, ensuring center supervisors only access attendance logs matching their assigned `exam_center_code`.
 
 ---
 
-### 4. 🔍 Public Verification Portal
+### 4. 🔍 Public Verification Module (`apps/parakh-public-verification-portal`)
 
-An open-access verification portal allowing universities and employers to verify document authenticity.
+An open-access validation tool for third-party entities (employers, universities, registrars) to confirm academic records authenticity.
 
 ```mermaid
-flowchart TD
-    U1[User drops Markshest PDF] --> H1[Compute file SHA-256 hash]
-    H1 --> Q1{Query blockchain_records}
-    Q1 -->|Hash Match Found| V1[Return Status: Verified]
-    Q1 -->|Hash Mismatch| V2[Return Status: Tampered/Modified]
-    V1 --> D1[Display Student Name, Roll Number, Grades from database]
-    V2 --> D2[Display Danger Alert: Byte changes detected!]
+sequenceDiagram
+    autonumber
+    actor Verifier as 🔍 Third-Party Verifier
+    participant Portal as 🖥️ Public Verification Client<br/>(React/Vite)
+    participant Deno as ⚙️ Deno Edge Function<br/>(verify-document)
+    participant Supabase as ⚡ Supabase DB & Ledger
+
+    Verifier->>Portal: Drags & Drops Certificate PDF
+    Note over Portal: Computes file SHA-256 hash locally<br/>via browser Web Crypto API<br/>(File bytes never leave browser)
+    Portal->>Deno: Sends computed SHA-256 hash & reference number
+    Deno->>Supabase: Queries certificates & blockchain_records tables
+    Note over Supabase: Matches PDF hash against anchored ledger
+    Supabase-->>Deno: Returns blockchain anchor matching details
+    Deno-->>Portal: Returns verification confirmation payload
+    Portal->>Verifier: Displays glowing trust shield:<br/>"Authentic Certificate" + Block Metadata
 ```
 
-#### A. Architecture
-* **No Authentication (Public Access)**: Accessible by anyone. RLS policies allow SELECT queries on the `certificates` and `blockchain_records` tables only for records marked as `Issued`.
-* **Zero-Knowledge Check**: No student data is exposed during the drag-and-drop check until the uploaded file's hash matches the secure database hash.
+#### A. Code & File Architecture
+* **[`src/components/MainVerificationModule.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-public-verification-portal/src/components/MainVerificationModule.tsx)**: The main validator workspace. Integrates drag-and-drop file inputs, handles client-side PDF parsing, generates SHA-256 byte hashes in-browser using browser-native `window.crypto.subtle`, and calls the Deno `verify-document` backend.
+* **[`src/components/RegistryLookup.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-public-verification-portal/src/components/RegistryLookup.tsx)**: Registry search console. Resolves credentials instantly from the database by querying the unique Roll Number or Certificate ID.
+* **[`src/components/AuditProofViewer.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-public-verification-portal/src/components/AuditProofViewer.tsx)**: The blockchain block visualizer card. Displays transaction hashes (`tx_hash`), block indices, authority signatures, previous block hashes, and timestamps.
+* **[`src/components/OfficialVerificationGuide.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-public-verification-portal/src/components/OfficialVerificationGuide.tsx) & [`PrestigeIntro.tsx`](file:///d:/Yash/Hackathons/Far-Away/Parakh/apps/parakh-public-verification-portal/src/components/PrestigeIntro.tsx)**: Displays credentials validation rules, policy statements, and portal guides.
 
-#### B. Working Flow
-1. **Upload PDF**: A recruiter drops the student's PDF transcript.
-2. **Client-Side Hashing**: The browser computes the file's SHA-256 hash using the Web Crypto API.
-3. **Database Match**: The hash is sent to the `verify-document` Edge Function. The function checks for matches in the blockchain records and returns the student metadata only if a secure match is verified.
-
-#### C. Core Features
-* **Drag-and-drop document hash validator**.
-* **Direct lookup** (search by roll number or certificate ID).
-* **Cryptographic consensus log viewer** (view signature, block number, previous hash).
+#### B. Database Schema & API Integrations
+* **Database Tables**: Accesses `certificates`, `blockchain_records`, and logs lookup transactions in the `verification_requests` table.
+* **Row-Level Security (RLS)**: Bypass policies permit selective public SELECT operations on certificates and blockchain anchors matching the uploaded SHA-256 signature to allow verification.
+* **Edge Function Call**: Queries `/functions/v1/verify-document` with the certificate's document hash and reference ID, executing database validation and returning verification payloads.
 
 ---
 
