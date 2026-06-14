@@ -1,4 +1,5 @@
-# PARAKH-Proactive Assessment and Result Audit for Knowledge & Honesty Ecosystem
+# PARAKH - Ecosystem
+##### Proactive Assessment and Result Audit for Knowledge & Honesty
 ### Secure, Transparent & Blockchain-Anchored Board Examination Management System
 
 <p align="center">
