@@ -175,8 +175,8 @@ To run all four applications simultaneously in development mode:
 2. **Configure Environment variables**:
    Each app directory has a `.env` file pre-loaded with your Supabase credentials:
    ```env
-   VITE_SUPABASE_URL="https://xapeorzscuwggqqocvsq.supabase.co"
-   VITE_SUPABASE_ANON_KEY="sb_publishable_zctZhq8PRiP3GxhOwr2EkA_B35fngfX..."
+   VITE_SUPABASE_URL="https://xa..................sq.supabase.co"
+   VITE_SUPABASE_ANON_KEY="sb_publishable_zctZ....EkA_B35fngfX..."
    ```
 
 3. **Start All Servers**:
