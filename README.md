@@ -71,7 +71,7 @@ The PARAKH system is divided into **4 distinct portals** that run simultaneously
 ### 4. 🔍 Public Verification Portal
 > Open-access verification hub for universities, employers, and credentials validators.
 * **Live Deployment Link**: 
-  [![Public Verification Deployed](https://img.shields.io/badge/Launch-Public_Verification-3ECF8E?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-public-verification.vercel.app)
+  [![Public Verification Deployed](https://img.shields.io/badge/Launch-Public_Verification-3ECF8E?style=for-the-badge&logo=vercel&logoColor=white)](https://parakh-verifier.vercel.app)
 * **Key Features**:
   * 🔍 Roll number & certificate ID instant lookup.
   * 📄 **Drag-and-Drop Validator**: Upload certificate PDFs to detect any tamper or byte modifications instantly against blockchain hashes.
